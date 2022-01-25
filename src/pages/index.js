@@ -150,6 +150,7 @@ export default function PaginaInicial() {
                   marginBottom: '16px',
                 }}
                 src={`https://github.com/${username}.png`}
+                alt='Foto'
               />
               <Text
                 variant="body4"
