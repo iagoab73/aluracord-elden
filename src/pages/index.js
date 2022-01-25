@@ -1,34 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components'
+import { useState } from 'react';
+import { useRouter } from 'next/router'
 import appConfig from './../../config.json'
-
-function GlobalStyle() {
-    return (
-        <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}</style>
-    );
-}
 
 function Titulo(props) {
     const { children } = props
@@ -62,11 +35,13 @@ function Titulo(props) {
 // export default HomePage
 
 export default function PaginaInicial() {
-    const username = 'iagoab73';
+    // var username = 'iagoab73';
+    const [username, setUsername] = useState('iagoab73')
+    const [displayPicture, setDisplayPicture] = useState(true)
+    const roteamento = useRouter()
   
     return (
       <>
-        <GlobalStyle />
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -92,6 +67,11 @@ export default function PaginaInicial() {
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={function (infosEvento) {
+                  console.log(infosEvento)
+                  infosEvento.preventDefault()
+                  roteamento.push('/chat')
+              }}
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -101,7 +81,7 @@ export default function PaginaInicial() {
               <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
                 {appConfig.name}
               </Text>
-  
+
               <TextField
                 fullWidth
                 textFieldColors={{
@@ -111,6 +91,13 @@ export default function PaginaInicial() {
                     mainColorHighlight: appConfig.theme.colors.primary[500],
                     backgroundColor: appConfig.theme.colors.neutrals[800],
                   },
+                }}
+                value={username}
+                onChange={function (event) {
+                    // Setando valor no state do atributo username
+                    const valor = event.target.value;
+                    setUsername(valor)
+                    setDisplayPicture(valor.length > 2)
                 }}
               />
               <Button
@@ -127,11 +114,10 @@ export default function PaginaInicial() {
             </Box>
             {/* Formulário */}
   
-  
             {/* Photo Area */}
             <Box
               styleSheet={{
-                display: 'flex',
+                display: displayPicture ? 'flex' : 'none',
                 flexDirection: 'column',
                 alignItems: 'center',
                 maxWidth: '200px',
